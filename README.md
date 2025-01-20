@@ -23,13 +23,15 @@ Light and dark theme is added, so that the user can choose the theme which is pr
 
 ## Getting Started
 
-This project is a starting point for a Ecom application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Install the [Flutter SDK](https://flutter.dev/docs/get-started/install).
+- Install an IDE like [Visual Studio Code](https://code.visualstudio.com/) or [Android Studio](https://developer.android.com/studio).
+- Make sure you have a connected device or an emulator to run the app.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Clone the Repository
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Clone this repository to your local machine using Git:
+
+```bash
+git clone https://github.com/lakindugamage/ecom_app.git
