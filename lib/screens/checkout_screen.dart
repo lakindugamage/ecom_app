@@ -7,6 +7,7 @@ import 'package:ecom_app/blocs/user/user_state.dart';
 import 'package:ecom_app/models/user.dart';
 import 'package:ecom_app/util/color/custom_color.dart';
 import 'package:ecom_app/widgets/cart_product_view_card.dart';
+import 'package:ecom_app/widgets/custom_snack_bar.dart';
 import 'package:ecom_app/widgets/custom_text_button.dart';
 import 'package:ecom_app/widgets/custom_textfield_with_heading.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               } else if (state is CartLoaded) {
                 return BlocBuilder<UserBloc, UserState>(
                   builder: (context, state1) {
-                    if (state1 is UserUpdated) {
+                    if (state1 is UserEmpty) {
+                      return const Text('No users.');
+                    } else {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -87,19 +90,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           const SizedBox(height: 15),
                           CustomTextfieldWithHeading(
                             heading: 'Name',
-                            hintText: state1.users!.name,
                             controller: nameController,
                           ),
                           const SizedBox(height: 12),
                           CustomTextfieldWithHeading(
                             heading: 'Address',
-                            hintText: state1.users!.address,
                             controller: addressController,
                           ),
                           const SizedBox(height: 12),
                           CustomTextfieldWithHeading(
                             heading: 'Contact Number',
-                            hintText: state1.users!.contactNumber,
                             controller: contactController,
                             keyboadType: TextInputType.phone,
                           ),
@@ -130,19 +130,75 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 const Spacer(),
                                 CustomTextButton(
                                   onTap: () {
+                                    // Check whether the name is added to the field.
+                                    if (nameController.text.trim().isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        CustomSnackBar(
+                                          message: 'Please fill out the name.',
+                                          backgroundColor: CustomColor.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    // Check whethter the name has numbers.
+                                    final nameHasNumbers = RegExp(r'\d')
+                                        .hasMatch(nameController.text.trim());
+                                    // If there are numbers change the name again.
+                                    if (nameHasNumbers) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        CustomSnackBar(
+                                          message:
+                                              'Name cannot contain any numbers',
+                                          backgroundColor: CustomColor.red,
+                                        ),
+                                      );
+                                    }
+                                    // Check whether the address is added to the field.
+                                    if (addressController.text.trim().isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        CustomSnackBar(
+                                          message:
+                                              'Please fill out the address.',
+                                          backgroundColor: CustomColor.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    // Check whether the contact number is added to the field.
+                                    if (contactController.text.trim().isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        CustomSnackBar(
+                                          message:
+                                              'Please fill out the contact number.',
+                                          backgroundColor: CustomColor.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    // Check if there is any texts in the contact number.
+                                    final isNumeric = RegExp(r'^\d+$').hasMatch(
+                                        contactController.text.trim());
+                                    if (!isNumeric) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        CustomSnackBar(
+                                          message:
+                                              'Contact number can only contain digits.',
+                                          backgroundColor: CustomColor.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    // If all the fields are not empty and the conditions are correct, add the user.
                                     final user = User(
-                                      id: state1.users!.id,
-                                      name: nameController.text.trim().isEmpty
-                                          ? state1.users!.name
-                                          : nameController.text.trim(),
-                                      address:
-                                          addressController.text.trim().isEmpty
-                                              ? state1.users!.address
-                                              : addressController.text.trim(),
+                                      name: nameController.text.trim(),
+                                      address: addressController.text.trim(),
                                       contactNumber:
-                                          contactController.text.trim().isEmpty
-                                              ? state1.users!.contactNumber
-                                              : contactController.text.trim(),
+                                          contactController.text.trim(),
                                     );
 
                                     // Add details of the user.
@@ -171,6 +227,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   .add(ClearCart());
                                               // Return to home screen.
                                               context.goNamed('/home_screen');
+                                              // Clear user data.
+                                              context
+                                                  .read<UserBloc>()
+                                                  .add(ClearUser());
                                             },
                                             child: const Text('OK'),
                                           ),
@@ -190,11 +250,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           ),
                         ],
-                      );
-                    } else {
-                      return Text(
-                        'User data loading',
-                        style: Theme.of(context).textTheme.titleMedium,
                       );
                     }
                   },

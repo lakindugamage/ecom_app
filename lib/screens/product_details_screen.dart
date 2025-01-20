@@ -4,6 +4,7 @@ import 'package:ecom_app/blocs/product/product_bloc.dart';
 import 'package:ecom_app/models/cart_item.dart';
 import 'package:ecom_app/models/product.dart';
 import 'package:ecom_app/util/color/custom_color.dart';
+import 'package:ecom_app/widgets/custom_snack_bar.dart';
 import 'package:ecom_app/widgets/custom_text_with_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -120,32 +121,16 @@ class ProductDetailsScreen extends StatelessWidget {
 
                               // Notifying user that the product is added to the cart.
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Center(
-                                    child: Text(
-                                      'Added to the cart',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displayLarge,
-                                    ),
-                                  ),
-                                  duration: const Duration(milliseconds: 500),
+                                CustomSnackBar(
+                                  message: 'Addded to the cart',
                                   backgroundColor: CustomColor.green,
                                 ),
                               );
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Center(
-                                    child: Text(
-                                      'Cannot add product to the cart',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displayLarge,
-                                    ),
-                                  ),
-                                  duration: const Duration(seconds: 1),
-                                  backgroundColor: Colors.red,
+                                CustomSnackBar(
+                                  message: 'Cannot add product to the cart',
+                                  backgroundColor: CustomColor.red,
                                 ),
                               );
                             }

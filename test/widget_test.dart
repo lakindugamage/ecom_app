@@ -6,20 +6,16 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:ecom_app/repositories/product_repository.dart';
-import 'package:ecom_app/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:ecom_app/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     var productRepository = ProductRepository();
-    var userRepository = UserRepository();
     await tester.pumpWidget(MyApp(
       productRepository: productRepository,
-      userRepository: userRepository,
     ));
 
     // Verify that our counter starts at 0.
