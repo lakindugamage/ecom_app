@@ -2,10 +2,8 @@ import 'package:ecom_app/blocs/cart/cart_bloc.dart';
 import 'package:ecom_app/blocs/product/product_bloc.dart';
 import 'package:ecom_app/blocs/product/product_event.dart';
 import 'package:ecom_app/blocs/user/user_bloc.dart';
-import 'package:ecom_app/blocs/user/user_event.dart';
 import 'package:ecom_app/path/path.dart';
 import 'package:ecom_app/repositories/product_repository.dart';
-import 'package:ecom_app/repositories/user_repository.dart';
 import 'package:ecom_app/util/theme/dark_theme.dart';
 import 'package:ecom_app/util/theme/light_theme.dart';
 import 'package:flutter/material.dart';
@@ -29,20 +27,14 @@ Future<void> main() async {
   FlutterNativeSplash.remove();
 
   final productRepository = ProductRepository();
-  final userRepository = UserRepository();
-  runApp(MyApp(
-    productRepository: productRepository,
-    userRepository: userRepository,
-  ));
+  runApp(MyApp(productRepository: productRepository));
 }
 
 class MyApp extends StatelessWidget {
   final ProductRepository productRepository;
-  final UserRepository userRepository;
   const MyApp({
     super.key,
     required this.productRepository,
-    required this.userRepository,
   });
 
   @override
@@ -56,7 +48,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (_) => CartBloc()),
         BlocProvider(
-          create: (_) => UserBloc(userRepository)..add(FetchUser()),
+          create: (_) => UserBloc(),
         ),
       ],
       child: MaterialApp.router(

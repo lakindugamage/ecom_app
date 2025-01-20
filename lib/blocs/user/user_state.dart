@@ -2,6 +2,7 @@ import 'package:ecom_app/models/user.dart';
 
 abstract class UserState {}
 
+// Empty user
 class UserEmpty extends UserState {}
 
 // Loading the user.

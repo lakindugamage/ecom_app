@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomTextfieldWithHeading extends StatefulWidget {
   final String heading;
-  final String hintText;
+  final String? hintText;
   final Color hintTextColor;
   final double hintTextSize;
   final double borderRadius;
@@ -14,7 +14,7 @@ class CustomTextfieldWithHeading extends StatefulWidget {
   const CustomTextfieldWithHeading({
     super.key,
     required this.heading,
-    required this.hintText,
+    this.hintText,
     this.hintTextColor = CustomColor.grey,
     this.hintTextSize = 16,
     this.borderRadius = 9,
