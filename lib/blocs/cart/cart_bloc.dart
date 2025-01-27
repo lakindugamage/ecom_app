@@ -5,7 +5,6 @@ import 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartEmpty()) {
-
     // Add items to the cart.
     on<AddToCart>((event, emit) {
       if (state is CartLoaded) {
@@ -18,7 +17,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         if (currentProductList
             .any((product) => product.id == event.cartProducts.id)) {
           // Initailize the updated products list.
-          updatedProducts = List<CartItem>.from(currentState.cartProducts);
+          updatedProducts = currentProductList;
           // Increment product qunatity without adding the item to the updated products list.
           updatedProducts = updatedProducts.map((product) {
             if (event.cartProducts.id == product.id) {
@@ -35,11 +34,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
               return product;
             }
           });
-        } 
+        }
         // Add item to the update products list.
         else {
-          updatedProducts = List<CartItem>.from(currentState.cartProducts)
-            ..add(event.cartProducts);
+          updatedProducts = currentProductList..add(event.cartProducts);
         }
         // Get the total value of the updated products list.
         final total = updatedProducts.fold(

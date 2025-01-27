@@ -5,12 +5,7 @@ import '../models/product.dart';
 
 class ProductRepository {
   Future<List<Product>> fetchProducts() async {
-    final String? productUrl = dotenv.env['API_PRODUCT_URL'];
-
-    if (productUrl == null || productUrl.isEmpty) {
-      throw Exception(
-          'API_PRODUCT_URL is not set in the environment variables');
-    }
+    final productUrl = dotenv.env['API_PRODUCT_URL']!;
 
     try {
       final Uri url = Uri.parse(productUrl);
