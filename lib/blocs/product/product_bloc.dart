@@ -6,17 +6,14 @@ import 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-  final ProductRepository productRepository;
-
-  ProductBloc(this.productRepository) : super(ProductLoading()) {
-
+  ProductBloc() : super(ProductLoading()) {
     // Fetch for products.
     on<FetchProducts>(
       (event, emit) async {
         emit(ProductLoading());
         try {
           // Fetch the products from the API.
-          final products = await productRepository.fetchProducts();
+          final products = await ProductRepository().fetchProducts();
           emit(ProductLoaded(products));
         } catch (e) {
           emit(
@@ -29,10 +26,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     // Search for products.
     on<SearchProducts>(
       (event, emit) async {
-        final currentState = state;
-        if (currentState is ProductLoaded) {
-          // Fetch the products from the API.
-          final products = await productRepository.fetchProducts();
+        // Set the state as product loading when searching.
+        emit(ProductLoading());
+        try {
+          // Fetch the products from the API when searching.
+          final products = await ProductRepository().fetchProducts();
           final filteredProducts = products
               .where(
                 (product) => product.name
@@ -43,9 +41,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           emit(
             ProductLoaded(filteredProducts),
           );
+        } catch (state) {
+          const ProductError('Failed to search product.');
         }
       },
     );
-    
   }
 }

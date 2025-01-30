@@ -90,40 +90,48 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CircularProgressIndicator(),
                     );
                   } else if (state is ProductLoaded) {
-                    return ListView.builder(
-                      itemCount: state.products.length,
-                      itemBuilder: (context, index) {
-                        final product = state.products[index];
-                        return ProductViewCard(
-                          product: product,
-                          onTap: () {
-                            context.go('/product_details_screen/${product.id}');
-                          },
-                          addToCart: () {
-                            // Add item to the cart.
-                            context.read<CartBloc>().add(
-                                  AddToCart(
-                                    CartItem(
-                                      id: product.id,
-                                      name: product.name,
-                                      description: product.description,
-                                      price: product.price,
-                                      image: product.image,
-                                      qunatity: 1,
+                    return state.products.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No Products Found',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: state.products.length,
+                            itemBuilder: (context, index) {
+                              final product = state.products[index];
+                              return ProductViewCard(
+                                product: product,
+                                onTap: () {
+                                  context.go(
+                                      '/product_details_screen/${product.id}');
+                                },
+                                addToCart: () {
+                                  // Add item to the cart.
+                                  context.read<CartBloc>().add(
+                                        AddToCart(
+                                          CartItem(
+                                            id: product.id,
+                                            name: product.name,
+                                            description: product.description,
+                                            price: product.price,
+                                            image: product.image,
+                                            qunatity: 1,
+                                          ),
+                                        ),
+                                      );
+                                  // Alert the user when adding items to the cart.
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    CustomSnackBar(
+                                      message: 'Addded to the cart',
+                                      backgroundColor: CustomColor.green,
                                     ),
-                                  ),
-                                );
-                            // Alert the user when adding items to the cart.
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              CustomSnackBar(
-                                message: 'Addded to the cart',
-                                backgroundColor: CustomColor.green,
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
+                                  );
+                                },
+                              );
+                            },
+                          );
                   } else {
                     return const Center(
                       child: Text('Failed to load products'),

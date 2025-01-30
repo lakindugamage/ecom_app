@@ -3,7 +3,6 @@ import 'package:ecom_app/blocs/product/product_bloc.dart';
 import 'package:ecom_app/blocs/product/product_event.dart';
 import 'package:ecom_app/blocs/user/user_bloc.dart';
 import 'package:ecom_app/path/path.dart';
-import 'package:ecom_app/repositories/product_repository.dart';
 import 'package:ecom_app/util/theme/dark_theme.dart';
 import 'package:ecom_app/util/theme/light_theme.dart';
 import 'package:flutter/material.dart';
@@ -25,16 +24,12 @@ Future<void> main() async {
     const Duration(seconds: 1),
   );
   FlutterNativeSplash.remove();
-
-  final productRepository = ProductRepository();
-  runApp(MyApp(productRepository: productRepository));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final ProductRepository productRepository;
   const MyApp({
     super.key,
-    required this.productRepository,
   });
 
   @override
@@ -44,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => ProductBloc(productRepository)..add(FetchProducts()),
+          create: (_) => ProductBloc()..add(FetchProducts()),
         ),
         BlocProvider(create: (_) => CartBloc()),
         BlocProvider(
